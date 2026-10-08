@@ -1,0 +1,1902 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Workout Planner | Jadwal Latihan & Nutrisi</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: system-ui, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+    }
+
+    body {
+      background: #f4f7fc;
+      color: #0b1a2e;
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .app-container {
+      max-width: 1300px;
+      width: 100%;
+    }
+
+    /* HEADER */
+    .header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      background: white;
+      padding: 1.25rem 2rem;
+      border-radius: 2rem;
+      box-shadow: 0 8px 20px rgba(0, 20, 40, 0.06);
+    }
+
+    .logo-area {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo-icon {
+      background: #1e3a8a;
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-icon svg {
+      width: 26px;
+      height: 26px;
+      stroke: white;
+      stroke-width: 1.8;
+      fill: none;
+    }
+
+    .logo-text h1 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #0b1a2e;
+    }
+
+    .logo-text p {
+      font-size: 0.8rem;
+      color: #4a5b6f;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+    }
+
+    .water-reminder-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: #eef6ff;
+      padding: 0.6rem 1.2rem;
+      border-radius: 60px;
+      border: 1px solid #cde0f5;
+    }
+
+    .water-reminder-header svg {
+      width: 28px;
+      height: 28px;
+      stroke: #1e5f9e;
+      stroke-width: 1.8;
+      fill: none;
+    }
+
+    .water-counter {
+      font-weight: 600;
+      color: #0b2b4a;
+    }
+
+    .water-counter span {
+      font-size: 1.3rem;
+      font-weight: 800;
+      color: #0a4b7a;
+      margin-right: 4px;
+    }
+
+    .btn-water {
+      background: #1e5f9e;
+      border: none;
+      color: white;
+      padding: 0.5rem 1.2rem;
+      border-radius: 40px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-water svg {
+      width: 18px;
+      height: 18px;
+      stroke: white;
+      stroke-width: 2;
+    }
+
+    .btn-water:hover {
+      background: #0f3f6e;
+    }
+
+    .btn-reset-water {
+      background: transparent;
+      border: 1px solid #b6cde0;
+      border-radius: 40px;
+      padding: 0.5rem 1rem;
+      font-weight: 500;
+      font-size: 0.8rem;
+      color: #26577c;
+      cursor: pointer;
+      transition: 0.1s;
+    }
+
+    .btn-reset-water:hover {
+      background: #e2edf9;
+    }
+
+    /* GRID UTAMA */
+    .dashboard-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    /* KARTU */
+    .card {
+      background: white;
+      border-radius: 2rem;
+      padding: 1.8rem;
+      box-shadow: 0 15px 30px rgba(0, 20, 40, 0.05);
+      border: 1px solid #e9f0f8;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .card-header svg {
+      width: 32px;
+      height: 32px;
+      stroke: #1e3a8a;
+      stroke-width: 1.8;
+      fill: none;
+    }
+
+    .card-header h2 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: #0b1a2e;
+      flex: 1;
+    }
+
+    /* FILTER SECTION */
+    .filter-section {
+      display: flex;
+      gap: 0.5rem;
+      background: #f0f5fc;
+      padding: 0.35rem;
+      border-radius: 40px;
+      margin-bottom: 1.5rem;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .filter-btn {
+      flex: 1;
+      min-width: 80px;
+      background: transparent;
+      border: none;
+      padding: 0.6rem 1rem;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: #3f5e7c;
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+    }
+
+    .filter-btn svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .filter-btn.active {
+      background: white;
+      color: #1e3a8a;
+      box-shadow: 0 3px 8px rgba(0, 20, 40, 0.08);
+    }
+
+    .filter-btn:hover:not(.active) {
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    .week-selector {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: white;
+      padding: 0.3rem 0.3rem 0.3rem 1rem;
+      border-radius: 40px;
+      border: 1px solid #d4e3f2;
+      flex: 1;
+      min-width: 240px;
+    }
+
+    .week-selector label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #3f5e7c;
+      white-space: nowrap;
+    }
+
+    .week-selector select {
+      border: none;
+      background: #eef4fb;
+      padding: 0.5rem 0.8rem;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: #1e3a8a;
+      cursor: pointer;
+      outline: none;
+      width: 100%;
+    }
+
+    /* ADD BUTTON */
+    .btn-add {
+      background: #1e3a8a;
+      color: white;
+      border: none;
+      padding: 0.75rem 1.4rem;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.15s;
+      box-shadow: 0 4px 12px rgba(30, 58, 138, 0.25);
+      width: 100%;
+      justify-content: center;
+      margin-bottom: 1.2rem;
+    }
+
+    .btn-add svg {
+      width: 18px;
+      height: 18px;
+      stroke: white;
+      stroke-width: 2.5;
+      fill: none;
+    }
+
+    .btn-add:hover {
+      background: #152b6b;
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(30, 58, 138, 0.35);
+    }
+
+    .btn-add:active {
+      transform: translateY(0);
+    }
+
+    /* SCHEDULE LIST */
+    .schedule-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      max-height: 600px;
+      overflow-y: auto;
+      padding-right: 0.5rem;
+    }
+
+    .schedule-list::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .schedule-list::-webkit-scrollbar-track {
+      background: #f0f5fc;
+      border-radius: 10px;
+    }
+
+    .schedule-list::-webkit-scrollbar-thumb {
+      background: #c1d6ec;
+      border-radius: 10px;
+    }
+
+    .schedule-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1rem;
+      background: #fbfdff;
+      border-radius: 1.5rem;
+      border: 1px solid #e5eef8;
+      transition: all 0.15s;
+      position: relative;
+    }
+
+    .schedule-item:hover {
+      border-color: #c1d9f0;
+      box-shadow: 0 4px 12px rgba(30, 90, 160, 0.06);
+    }
+
+    .day-icon {
+      background: #eef4fe;
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .day-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke: #1e5f9e;
+      stroke-width: 1.8;
+      fill: none;
+    }
+
+    .day-icon span {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #1e5f9e;
+      text-transform: uppercase;
+      margin-top: 1px;
+    }
+
+    .schedule-detail {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .schedule-detail h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .schedule-detail h3 svg {
+      width: 18px;
+      height: 18px;
+      stroke: #3b6a9e;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .schedule-meta {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      margin-top: 4px;
+      font-size: 0.72rem;
+      color: #5c748b;
+    }
+
+    .schedule-meta span {
+      background: #eef4fe;
+      padding: 2px 8px;
+      border-radius: 20px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .schedule-meta svg {
+      width: 12px;
+      height: 12px;
+      stroke: #3f5e7c;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .exercise-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .exercise-tag {
+      background: #f0f6ff;
+      color: #1c4a78;
+      font-size: 0.75rem;
+      font-weight: 500;
+      padding: 0.2rem 0.65rem;
+      border-radius: 30px;
+      border: 1px solid #c9ddf2;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .exercise-tag svg {
+      width: 12px;
+      height: 12px;
+      stroke: #2e5f8a;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .btn-delete {
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      padding: 0.4rem;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+      flex-shrink: 0;
+    }
+
+    .btn-delete svg {
+      width: 18px;
+      height: 18px;
+      stroke: #a0b4c8;
+      stroke-width: 1.8;
+      fill: none;
+      transition: all 0.15s;
+    }
+
+    .btn-delete:hover {
+      background: #ffe8e8;
+    }
+
+    .btn-delete:hover svg {
+      stroke: #d43f3f;
+    }
+
+    /* EMPTY STATE */
+    .empty-state {
+      text-align: center;
+      padding: 3rem 1rem;
+      color: #8095aa;
+    }
+
+    .empty-state svg {
+      width: 64px;
+      height: 64px;
+      stroke: #b8cade;
+      stroke-width: 1.4;
+      fill: none;
+      margin-bottom: 1rem;
+    }
+
+    .empty-state p {
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+
+    .empty-state small {
+      font-size: 0.8rem;
+      opacity: 0.8;
+    }
+
+    /* KARTU NUTRISI */
+    .nutrition-card {
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+    }
+
+    .protein-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .protein-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: #f8fbfe;
+      padding: 0.9rem 1rem;
+      border-radius: 1.2rem;
+      border: 1px solid #deecf9;
+    }
+
+    .protein-icon {
+      background: #d9e9fa;
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .protein-icon svg {
+      width: 22px;
+      height: 22px;
+      stroke: #1a4b78;
+      stroke-width: 1.8;
+      fill: none;
+    }
+
+    .protein-info {
+      flex: 1;
+    }
+
+    .protein-info .meal {
+      font-weight: 700;
+      font-size: 0.95rem;
+      color: #0f2e4a;
+    }
+
+    .protein-info .menu {
+      font-size: 0.8rem;
+      color: #3f5e7c;
+      margin-top: 3px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .protein-info .menu svg {
+      width: 14px;
+      height: 14px;
+      stroke: #3f5e7c;
+      stroke-width: 1.8;
+      flex-shrink: 0;
+    }
+
+    /* WATER */
+    .water-section {
+      background: #edf5fd;
+      border-radius: 1.5rem;
+      padding: 1.3rem;
+    }
+
+    .water-header {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      margin-bottom: 1rem;
+    }
+
+    .water-header svg {
+      width: 26px;
+      height: 26px;
+      stroke: #1e5f9e;
+      stroke-width: 1.8;
+      fill: none;
+    }
+
+    .water-header h3 {
+      font-size: 1.2rem;
+      font-weight: 700;
+    }
+
+    .water-stats {
+      display: flex;
+      align-items: baseline;
+      gap: 1rem;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .water-big {
+      font-size: 2rem;
+      font-weight: 800;
+      color: #0f3b61;
+      line-height: 1;
+    }
+
+    .water-big small {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: #46688a;
+      margin-left: 6px;
+    }
+
+    .progress-bar {
+      background: #cbdef0;
+      height: 12px;
+      border-radius: 40px;
+      width: 100%;
+      margin-top: 0.8rem;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      background: linear-gradient(90deg, #2477c2, #1e5f9e);
+      border-radius: 40px;
+      transition: width 0.25s ease;
+    }
+
+    .water-buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 1.2rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-glass {
+      background: white;
+      border: 1px solid #b8d2ea;
+      padding: 0.6rem 1.2rem;
+      border-radius: 40px;
+      font-weight: 600;
+      color: #1d4e7a;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: 0.1s;
+      font-size: 0.85rem;
+    }
+
+    .btn-glass svg {
+      width: 18px;
+      height: 18px;
+      stroke: #1d4e7a;
+      stroke-width: 1.8;
+    }
+
+    .btn-glass:hover {
+      background: #e3effb;
+      border-color: #87b3db;
+    }
+
+    .btn-glass:active {
+      transform: scale(0.97);
+    }
+
+    /* MODAL */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(11, 26, 46, 0.55);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      padding: 1rem;
+    }
+
+    .modal-overlay.show {
+      display: flex;
+      animation: fadeIn 0.2s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideUp {
+      from { transform: translateY(20px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .modal {
+      background: white;
+      border-radius: 2rem;
+      padding: 2rem;
+      width: 100%;
+      max-width: 560px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 25px 60px rgba(0, 20, 40, 0.3);
+      animation: slideUp 0.25s ease;
+    }
+
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-header h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: #0b1a2e;
+    }
+
+    .modal-header h2 svg {
+      width: 28px;
+      height: 28px;
+      stroke: #1e3a8a;
+      stroke-width: 1.8;
+      fill: none;
+    }
+
+    .btn-close {
+      background: #f0f5fc;
+      border: none;
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.15s;
+    }
+
+    .btn-close svg {
+      width: 20px;
+      height: 20px;
+      stroke: #4a5b6f;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .btn-close:hover {
+      background: #e0eaf5;
+    }
+
+    .form-group {
+      margin-bottom: 1.2rem;
+    }
+
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: #1e3a8a;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .form-group label svg {
+      width: 16px;
+      height: 16px;
+      stroke: #1e3a8a;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1.5px solid #d4e3f2;
+      border-radius: 12px;
+      font-size: 0.9rem;
+      font-family: inherit;
+      color: #0b1a2e;
+      background: #fbfdff;
+      transition: all 0.15s;
+      outline: none;
+    }
+
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: #1e5f9e;
+      background: white;
+      box-shadow: 0 0 0 4px rgba(30, 95, 158, 0.08);
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .checkbox-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: #f0f6ff;
+      padding: 0.5rem 0.9rem;
+      border-radius: 40px;
+      cursor: pointer;
+      font-size: 0.82rem;
+      font-weight: 500;
+      color: #1c4a78;
+      border: 1.5px solid transparent;
+      transition: all 0.15s;
+      user-select: none;
+    }
+
+    .checkbox-item:hover {
+      background: #e0ecfa;
+    }
+
+    .checkbox-item.selected {
+      background: #1e3a8a;
+      color: white;
+      border-color: #1e3a8a;
+    }
+
+    .checkbox-item svg {
+      width: 14px;
+      height: 14px;
+      stroke: currentColor;
+      stroke-width: 2.2;
+      fill: none;
+    }
+
+    .modal-actions {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1.8rem;
+    }
+
+    .btn-primary {
+      flex: 1;
+      background: #1e3a8a;
+      color: white;
+      border: none;
+      padding: 0.85rem 1.5rem;
+      border-radius: 40px;
+      font-weight: 700;
+      font-size: 0.95rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: all 0.15s;
+    }
+
+    .btn-primary svg {
+      width: 18px;
+      height: 18px;
+      stroke: white;
+      stroke-width: 2.5;
+      fill: none;
+    }
+
+    .btn-primary:hover {
+      background: #152b6b;
+    }
+
+    .btn-secondary {
+      background: #eef4fb;
+      color: #3f5e7c;
+      border: none;
+      padding: 0.85rem 1.5rem;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .btn-secondary:hover {
+      background: #e0eaf5;
+    }
+
+    /* NOTIFIKASI */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #0b1a2e;
+      color: white;
+      padding: 0.9rem 1.5rem;
+      border-radius: 40px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      z-index: 2000;
+      opacity: 0;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .toast.show {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    .toast svg {
+      width: 18px;
+      height: 18px;
+      stroke: #4ade80;
+      stroke-width: 2.5;
+      fill: none;
+    }
+
+    /* FOOTER */
+    .footer-note {
+      margin-top: 2.5rem;
+      text-align: center;
+      font-size: 0.8rem;
+      color: #5c748b;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .footer-note svg {
+      width: 16px;
+      height: 16px;
+      stroke: #5c748b;
+      stroke-width: 1.8;
+      fill: none;
+    }
+
+    /* RESPONSIVE */
+    @media (max-width: 950px) {
+      .dashboard-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 600px) {
+      body { padding: 1rem; }
+      .card { padding: 1.3rem; }
+      .header { padding: 1rem 1.2rem; }
+      .logo-text h1 { font-size: 1.2rem; }
+      .modal { padding: 1.5rem; }
+      .form-row { grid-template-columns: 1fr; }
+      .filter-section { flex-direction: column; }
+      .week-selector { width: 100%; }
+      .schedule-item { flex-direction: column; }
+      .btn-delete { position: absolute; top: 8px; right: 8px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <!-- HEADER -->
+    <header class="header">
+      <div class="logo-area">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6.5 6.5L17.5 17.5M17.5 6.5L6.5 17.5" />
+            <circle cx="12" cy="12" r="9" />
+          </svg>
+        </div>
+        <div class="logo-text">
+          <h1>Workout Planner</h1>
+          <p>Jadwal latihan • protein • hidrasi</p>
+        </div>
+      </div>
+
+      <div class="water-reminder-header">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0L12 2.69z" />
+          <path d="M12 18v-6" />
+        </svg>
+        <div class="water-counter">
+          <span id="headerWaterAmount">0</span> / 8 gelas
+        </div>
+        <button class="btn-water" id="addWaterHeaderBtn">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 5v14M5 12h14" stroke-linecap="round" />
+          </svg>
+          Minum
+        </button>
+        <button class="btn-reset-water" id="resetWaterHeaderBtn">Reset</button>
+      </div>
+    </header>
+
+    <!-- DASHBOARD -->
+    <div class="dashboard-grid">
+      <!-- KARTU JADWAL LATIHAN -->
+      <div class="card">
+        <div class="card-header">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+            <line x1="16" y1="2" x2="16" y2="6" />
+            <line x1="8" y1="2" x2="8" y2="6" />
+            <line x1="3" y1="10" x2="21" y2="10" />
+            <path d="M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01" />
+          </svg>
+          <h2>Jadwal Latihan</h2>
+        </div>
+
+        <!-- Filter -->
+        <div class="filter-section">
+          <button class="filter-btn active" data-filter="week">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+            </svg>
+            Minggu Ini
+          </button>
+          <button class="filter-btn" data-filter="month">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="4" width="18" height="18" rx="2" />
+              <line x1="16" y1="2" x2="16" y2="6" />
+              <line x1="8" y1="2" x2="8" y2="6" />
+              <line x1="3" y1="10" x2="21" y2="10" />
+              <line x1="7" y1="14" x2="7" y2="14.01" />
+              <line x1="12" y1="14" x2="12" y2="14.01" />
+              <line x1="17" y1="14" x2="17" y2="14.01" />
+              <line x1="7" y1="18" x2="7" y2="18.01" />
+              <line x1="12" y1="18" x2="12" y2="18.01" />
+              <line x1="17" y1="18" x2="17" y2="18.01" />
+            </svg>
+            Bulan Ini
+          </button>
+          <button class="filter-btn" data-filter="all">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M3 6h18M3 12h18M3 18h18" />
+            </svg>
+            Semua
+          </button>
+        </div>
+
+        <button class="btn-add" id="openAddModal">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 5v14M5 12h14" stroke-linecap="round" />
+          </svg>
+          Tambah Latihan Baru
+        </button>
+
+        <!-- List Jadwal -->
+        <div class="schedule-list" id="scheduleList">
+          <!-- Diisi oleh JS -->
+        </div>
+      </div>
+
+      <!-- KARTU NUTRISI & AIR -->
+      <div class="nutrition-card">
+        <!-- PROTEIN -->
+        <div class="card" style="padding-bottom: 1.5rem;">
+          <div class="card-header">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
+              <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
+              <line x1="6" y1="1" x2="6" y2="4" />
+              <line x1="10" y1="1" x2="10" y2="4" />
+              <line x1="14" y1="1" x2="14" y2="4" />
+            </svg>
+            <h2>Jadwal Protein</h2>
+          </div>
+          <div class="protein-list">
+            <div class="protein-item">
+              <div class="protein-icon">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="8" />
+                  <path d="M12 8v8M8 12h8" />
+                </svg>
+              </div>
+              <div class="protein-info">
+                <div class="meal">Sarapan (07:00)</div>
+                <div class="menu">
+                  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4"/></svg>
+                  4 putih telur + 1 kuning, oatmeal
+                </div>
+              </div>
+            </div>
+            <div class="protein-item">
+              <div class="protein-icon">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M4 20h16M4 4h16M8 4v16M16 4v16" />
+                </svg>
+              </div>
+              <div class="protein-info">
+                <div class="meal">Snack (10:30)</div>
+                <div class="menu">
+                  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4"/></svg>
+                  Greek yogurt + almond
+                </div>
+              </div>
+            </div>
+            <div class="protein-item">
+              <div class="protein-icon">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
+                  <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
+                </svg>
+              </div>
+              <div class="protein-info">
+                <div class="meal">Makan siang (13:00)</div>
+                <div class="menu">
+                  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4"/></svg>
+                  Dada ayam 150g + nasi merah + brokoli
+                </div>
+              </div>
+            </div>
+            <div class="protein-item">
+              <div class="protein-icon">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="8" />
+                  <path d="M12 8v8M8 12h8" />
+                </svg>
+              </div>
+              <div class="protein-info">
+                <div class="meal">Setelah latihan (17:00)</div>
+                <div class="menu">
+                  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4"/></svg>
+                  Whey protein shake + pisang
+                </div>
+              </div>
+            </div>
+            <div class="protein-item">
+              <div class="protein-icon">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
+                  <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
+                </svg>
+              </div>
+              <div class="protein-info">
+                <div class="meal">Makan malam (20:00)</div>
+                <div class="menu">
+                  <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4"/></svg>
+                  Ikan salmon + quinoa + sayuran
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- AIR -->
+        <div class="card">
+          <div class="card-header">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0L12 2.69z" />
+              <path d="M12 18v-6" />
+            </svg>
+            <h2>Minum Air Putih</h2>
+          </div>
+          <div class="water-section">
+            <div class="water-header">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0L12 2.69z" />
+                <path d="M12 18v-6" />
+              </svg>
+              <h3>Target Harian: 8 gelas</h3>
+            </div>
+            <div class="water-stats">
+              <div class="water-big" id="waterBigDisplay">
+                0 <small>/ 8 gelas</small>
+              </div>
+              <div id="waterPercentDisplay" style="font-weight: 600; color: #1e5f9e;">0%</div>
+            </div>
+            <div class="progress-bar">
+              <div class="progress-fill" id="waterProgressFill" style="width: 0%;"></div>
+            </div>
+            <div class="water-buttons">
+              <button class="btn-glass" id="addGlassBtn">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0L12 2.69z" />
+                  <path d="M12 18v-6" />
+                </svg>
+                Tambah 1 gelas
+              </button>
+              <button class="btn-glass" id="resetGlassBtn">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8" />
+                  <path d="M3 3v5h5" />
+                </svg>
+                Reset
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-note">
+      <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="12" cy="12" r="10" />
+        <path d="M12 16v-4M12 8h.01" />
+      </svg>
+      Konsisten adalah kunci. Jaga hidrasi & asupan protein.
+    </div>
+  </div>
+
+  <!-- MODAL TAMBAH LATIHAN -->
+  <div class="modal-overlay" id="modalOverlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 5v14M5 12h14" />
+          </svg>
+          Tambah Latihan
+        </h2>
+        <button class="btn-close" id="closeModalBtn">
+          <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 6L6 18M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+
+      <form id="addWorkoutForm">
+        <div class="form-group">
+          <label>
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z" />
+              <line x1="16" y1="8" x2="2" y2="22" />
+            </svg>
+            Judul Latihan / Fokus Otot
+          </label>
+          <input type="text" id="inputTitle" placeholder="Contoh: Dada & Trisep" required />
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label>
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" />
+                <line x1="16" y1="2" x2="16" y2="6" />
+                <line x1="8" y1="2" x2="8" y2="6" />
+                <line x1="3" y1="10" x2="21" y2="10" />
+              </svg>
+              Hari
+            </label>
+            <select id="inputDay" required>
+              <option value="Senin">Senin</option>
+              <option value="Selasa">Selasa</option>
+              <option value="Rabu">Rabu</option>
+              <option value="Kamis">Kamis</option>
+              <option value="Jumat">Jumat</option>
+              <option value="Sabtu">Sabtu</option>
+              <option value="Minggu">Minggu</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <path d="M12 6v6l4 2" />
+              </svg>
+              Waktu
+            </label>
+            <input type="time" id="inputTime" value="07:00" required />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="3" />
+              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4" />
+            </svg>
+            Pilih Latihan
+          </label>
+          <div class="checkbox-group" id="exerciseOptions">
+            <!-- Diisi oleh JS -->
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+              <polyline points="14 2 14 8 20 8" />
+              <line x1="16" y1="13" x2="8" y2="13" />
+              <line x1="16" y1="17" x2="8" y2="17" />
+            </svg>
+            Catatan (opsional)
+          </label>
+          <textarea id="inputNotes" placeholder="Contoh: Fokus pada form, tambah beban 2.5kg"></textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" id="cancelBtn">Batal</button>
+          <button type="submit" class="btn-primary">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6L9 17l-5-5" />
+            </svg>
+            Simpan Latihan
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFIKASI -->
+  <div class="toast" id="toast">
+    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M20 6L9 17l-5-5" />
+    </svg>
+    <span id="toastMessage">Berhasil!</span>
+  </div>
+
+  <script>
+    (function() {
+      // ============ KONSTANTA ============
+      const MAX_GLASSES = 8;
+      const STORAGE_KEYS = {
+        WORKOUTS: 'wp_workouts_v1',
+        WATER: 'wp_water_v1'
+      };
+
+      // ============ DAFTAR OPSI LATIHAN ============
+      const EXERCISE_OPTIONS = [
+        // Dada
+        { id: 'bench_press', name: 'Bench Press', category: 'Dada' },
+        { id: 'push_up', name: 'Push Up', category: 'Dada' },
+        { id: 'incline_press', name: 'Incline Press', category: 'Dada' },
+        { id: 'dips', name: 'Dips', category: 'Dada' },
+        { id: 'cable_fly', name: 'Cable Fly', category: 'Dada' },
+        // Punggung
+        { id: 'pull_up', name: 'Pull Up', category: 'Punggung' },
+        { id: 'barbell_row', name: 'Barbell Row', category: 'Punggung' },
+        { id: 'lat_pulldown', name: 'Lat Pulldown', category: 'Punggung' },
+        { id: 'deadlift', name: 'Deadlift', category: 'Punggung' },
+        { id: 'seated_row', name: 'Seated Row', category: 'Punggung' },
+        // Kaki
+        { id: 'squat', name: 'Squat', category: 'Kaki' },
+        { id: 'lunges', name: 'Lunges', category: 'Kaki' },
+        { id: 'leg_press', name: 'Leg Press', category: 'Kaki' },
+        { id: 'calf_raise', name: 'Calf Raise', category: 'Kaki' },
+        { id: 'romanian_deadlift', name: 'Romanian Deadlift', category: 'Kaki' },
+        // Bahu
+        { id: 'overhead_press', name: 'Overhead Press', category: 'Bahu' },
+        { id: 'lateral_raise', name: 'Lateral Raise', category: 'Bahu' },
+        { id: 'front_raise', name: 'Front Raise', category: 'Bahu' },
+        { id: 'shrug', name: 'Shrug', category: 'Bahu' },
+        // Biceps
+        { id: 'barbell_curl', name: 'Barbell Curl', category: 'Biceps' },
+        { id: 'hammer_curl', name: 'Hammer Curl', category: 'Biceps' },
+        { id: 'preacher_curl', name: 'Preacher Curl', category: 'Biceps' },
+        // Trisep
+        { id: 'tricep_pushdown', name: 'Tricep Pushdown', category: 'Trisep' },
+        { id: 'skull_crusher', name: 'Skull Crusher', category: 'Trisep' },
+        { id: 'overhead_tricep', name: 'Overhead Tricep Extension', category: 'Trisep' },
+        // Core
+        { id: 'plank', name: 'Plank', category: 'Core' },
+        { id: 'crunch', name: 'Crunch', category: 'Core' },
+        { id: 'russian_twist', name: 'Russian Twist', category: 'Core' },
+        { id: 'leg_raise', name: 'Leg Raise', category: 'Core' },
+        { id: 'mountain_climber', name: 'Mountain Climber', category: 'Core' },
+        // Kardio
+        { id: 'running', name: 'Running', category: 'Kardio' },
+        { id: 'cycling', name: 'Cycling', category: 'Kardio' },
+        { id: 'jump_rope', name: 'Jump Rope', category: 'Kardio' },
+        { id: 'burpees', name: 'Burpees', category: 'Kardio' },
+        { id: 'rowing', name: 'Rowing', category: 'Kardio' }
+      ];
+
+      // ============ STATE ============
+      let workouts = [];
+      let waterGlasses = 0;
+      let currentFilter = 'week'; // 'week' | 'month' | 'all'
+      let selectedExercises = new Set();
+
+      // ============ DOM ELEMENTS ============
+      const scheduleList = document.getElementById('scheduleList');
+      const modalOverlay = document.getElementById('modalOverlay');
+      const openAddModalBtn = document.getElementById('openAddModal');
+      const closeModalBtn = document.getElementById('closeModalBtn');
+      const cancelBtn = document.getElementById('cancelBtn');
+      const addWorkoutForm = document.getElementById('addWorkoutForm');
+      const exerciseOptionsContainer = document.getElementById('exerciseOptions');
+      const filterBtns = document.querySelectorAll('.filter-btn');
+
+      // Water elements
+      const headerWaterAmount = document.getElementById('headerWaterAmount');
+      const waterBigDisplay = document.getElementById('waterBigDisplay');
+      const waterPercentDisplay = document.getElementById('waterPercentDisplay');
+      const waterProgressFill = document.getElementById('waterProgressFill');
+      const addWaterHeaderBtn = document.getElementById('addWaterHeaderBtn');
+      const resetWaterHeaderBtn = document.getElementById('resetWaterHeaderBtn');
+      const addGlassBtn = document.getElementById('addGlassBtn');
+      const resetGlassBtn = document.getElementById('resetGlassBtn');
+
+      // Toast
+      const toast = document.getElementById('toast');
+      const toastMessage = document.getElementById('toastMessage');
+
+      // ============ UTILITAS ============
+      function showToast(message) {
+        toastMessage.textContent = message;
+        toast.classList.add('show');
+        clearTimeout(window.toastTimeout);
+        window.toastTimeout = setTimeout(() => {
+          toast.classList.remove('show');
+        }, 2200);
+      }
+
+      function getTodayName() {
+        const days = ['Minggu', 'Senin', 'Selasa', 'Rabu', 'Kamis', 'Jumat', 'Sabtu'];
+        return days[new Date().getDay()];
+      }
+
+      function getDateString(date) {
+        const d = new Date(date);
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}`;
+      }
+
+      function formatDate(isoDate) {
+        const d = new Date(isoDate + 'T00:00:00');
+        const options = { day: 'numeric', month: 'short', year: 'numeric' };
+        return d.toLocaleDateString('id-ID', options);
+      }
+
+      // Cek apakah tanggal berada dalam minggu ini (Senin - Minggu)
+      function isThisWeek(isoDate) {
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const dayOfWeek = today.getDay(); // 0 = Minggu
+        const diffToMonday = (dayOfWeek === 0 ? 6 : dayOfWeek - 1);
+        const monday = new Date(today);
+        monday.setDate(today.getDate() - diffToMonday);
+        const sunday = new Date(monday);
+        sunday.setDate(monday.getDate() + 6);
+
+        const targetDate = new Date(isoDate + 'T00:00:00');
+        return targetDate >= monday && targetDate <= sunday;
+      }
+
+      // Cek apakah tanggal berada dalam bulan ini
+      function isThisMonth(isoDate) {
+        const today = new Date();
+        const targetDate = new Date(isoDate + 'T00:00:00');
+        return targetDate.getMonth() === today.getMonth()
+          && targetDate.getFullYear() === today.getFullYear();
+      }
+
+      // Konversi nama hari ke index mingguan (0=Minggu, 1=Senin, ...)
+      function dayNameToIndex(dayName) {
+        const map = {
+          'Minggu': 0, 'Senin': 1, 'Selasa': 2, 'Rabu': 3,
+          'Kamis': 4, 'Jumat': 5, 'Sabtu': 6
+        };
+        return map[dayName] ?? 1;
+      }
+
+      // ============ LOCAL STORAGE ============
+      function loadFromStorage() {
+        try {
+          const savedWorkouts = localStorage.getItem(STORAGE_KEYS.WORKOUTS);
+          if (savedWorkouts) {
+            workouts = JSON.parse(savedWorkouts);
+            if (!Array.isArray(workouts)) workouts = [];
+          }
+        } catch (e) {
+          console.warn('Gagal memuat workouts:', e);
+          workouts = [];
+        }
+
+        try {
+          const savedWater = localStorage.getItem(STORAGE_KEYS.WATER);
+          if (savedWater) {
+            const parsed = JSON.parse(savedWater);
+            waterGlasses = typeof parsed === 'number' ? parsed : 0;
+          }
+        } catch (e) {
+          console.warn('Gagal memuat water:', e);
+          waterGlasses = 0;
+        }
+      }
+
+      function saveWorkouts() {
+        try {
+          localStorage.setItem(STORAGE_KEYS.WORKOUTS, JSON.stringify(workouts));
+        } catch (e) {
+          console.error('Gagal menyimpan workouts:', e);
+        }
+      }
+
+      function saveWater() {
+        try {
+          localStorage.setItem(STORAGE_KEYS.WATER, JSON.stringify(waterGlasses));
+        } catch (e) {
+          console.error('Gagal menyimpan water:', e);
+        }
+      }
+
+      // ============ WATER FUNCTIONS ============
+      function updateWaterUI() {
+        if (waterGlasses > MAX_GLASSES) waterGlasses = MAX_GLASSES;
+        if (waterGlasses < 0) waterGlasses = 0;
+
+        headerWaterAmount.textContent = waterGlasses;
+        waterBigDisplay.innerHTML = `${waterGlasses} <small>/ ${MAX_GLASSES} gelas</small>`;
+
+        const percent = Math.round((waterGlasses / MAX_GLASSES) * 100);
+        waterPercentDisplay.textContent = percent + '%';
+        waterProgressFill.style.width = percent + '%';
+      }
+
+      function addWater() {
+        if (waterGlasses < MAX_GLASSES) {
+          waterGlasses++;
+          saveWater();
+          updateWaterUI();
+        } else {
+          showToast('Target 8 gelas sudah tercapai!');
+        }
+      }
+
+      function resetWater() {
+        waterGlasses = 0;
+        saveWater();
+        updateWaterUI();
+        showToast('Water tracker direset');
+      }
+
+      // ============ WORKOUT FUNCTIONS ============
+      function getFilteredWorkouts() {
+        return workouts.filter(w => {
+          if (currentFilter === 'all') return true;
+          if (currentFilter === 'week') return isThisWeek(w.date);
+          if (currentFilter === 'month') return isThisMonth(w.date);
+          return true;
+        });
+      }
+
+      function getDayIconSVG(dayName) {
+        // Icon sederhana per hari
+        return `<svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 4v16M18 4v16M4 8h4M16 8h4M4 16h4M16 16h4" />
+          <rect x="2" y="6" width="20" height="12" rx="1" />
+        </svg>`;
+      }
+
+      function renderWorkouts() {
+        const filtered = getFilteredWorkouts();
+
+        // Urutkan berdasarkan tanggal & waktu
+        filtered.sort((a, b) => {
+          const dateA = new Date(a.date + 'T' + (a.time || '00:00'));
+          const dateB = new Date(b.date + 'T' + (b.time || '00:00'));
+          return dateA - dateB;
+        });
+
+        if (filtered.length === 0) {
+          scheduleList.innerHTML = `
+            <div class="empty-state">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="3" y="4" width="18" height="18" rx="2" />
+                <line x1="16" y1="2" x2="16" y2="6" />
+                <line x1="8" y1="2" x2="8" y2="6" />
+                <line x1="3" y1="10" x2="21" y2="10" />
+              </svg>
+              <p>Belum ada latihan</p>
+              <small>Klik "Tambah Latihan Baru" untuk memulai</small>
+            </div>
+          `;
+          return;
+        }
+
+        scheduleList.innerHTML = filtered.map(w => {
+          const dayShort = w.day.substring(0, 3);
+          const exercises = (w.exercises || []).map(exId => {
+            const ex = EXERCISE_OPTIONS.find(e => e.id === exId);
+            if (!ex) return '';
+            return `<span class="exercise-tag">
+              <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="3" />
+                <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4" />
+              </svg>
+              ${ex.name}
+            </span>`;
+          }).join('');
+
+          const notesHtml = w.notes
+            ? `<div class="schedule-meta"><span>
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                  <polyline points="14 2 14 8 20 8" />
+                </svg>
+                ${escapeHtml(w.notes)}
+              </span></div>`
+            : '';
+
+          return `
+            <div class="schedule-item" data-id="${w.id}">
+              <div class="day-icon">
+                ${getDayIconSVG(w.day)}
+                <span>${dayShort}</span>
+              </div>
+              <div class="schedule-detail">
+                <h3>
+                  <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z" />
+                    <line x1="16" y1="8" x2="2" y2="22" />
+                    <line x1="17.5" y1="15" x2="9" y2="15" />
+                  </svg>
+                  ${escapeHtml(w.title)}
+                </h3>
+                <div class="schedule-meta">
+                  <span>
+                    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                      <circle cx="12" cy="12" r="10" />
+                      <path d="M12 6v6l4 2" />
+                    </svg>
+                    ${w.time}
+                  </span>
+                  <span>
+                    <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                      <rect x="3" y="4" width="18" height="18" rx="2" />
+                      <line x1="16" y1="2" x2="16" y2="6" />
+                      <line x1="8" y1="2" x2="8" y2="6" />
+                      <line x1="3" y1="10" x2="21" y2="10" />
+                    </svg>
+                    ${formatDate(w.date)}
+                  </span>
+                </div>
+                ${exercises ? `<div class="exercise-tags">${exercises}</div>` : ''}
+                ${notesHtml}
+              </div>
+              <button class="btn-delete" data-delete="${w.id}" title="Hapus">
+                <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="3 6 5 6 21 6" />
+                  <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2" />
+                  <line x1="10" y1="11" x2="10" y2="17" />
+                  <line x1="14" y1="11" x2="14" y2="17" />
+                </svg>
+              </button>
+            </div>
+          `;
+        }).join('');
+
+        // Event listener untuk tombol delete
+        scheduleList.querySelectorAll('[data-delete]').forEach(btn => {
+          btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const id = btn.getAttribute('data-delete');
+            deleteWorkout(id);
+          });
+        });
+      }
+
+      function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+      }
+
+      function deleteWorkout(id) {
+        if (!confirm('Yakin ingin menghapus latihan ini?')) return;
+        workouts = workouts.filter(w => w.id !== id);
+        saveWorkouts();
+        renderWorkouts();
+        showToast('Latihan dihapus');
+      }
+
+      function addWorkout(workout) {
+        workouts.push(workout);
+        saveWorkouts();
+        renderWorkouts();
+        showToast('Latihan berhasil ditambahkan');
+      }
+
+      // ============ MODAL FUNCTIONS ============
+      function renderExerciseOptions() {
+        exerciseOptionsContainer.innerHTML = EXERCISE_OPTIONS.map(ex => `
+          <div class="checkbox-item" data-ex-id="${ex.id}">
+            <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 6L9 17l-5-5" />
+            </svg>
+            ${ex.name}
+          </div>
+        `).join('');
+
+        // Event listener untuk setiap item
+        exerciseOptionsContainer.querySelectorAll('.checkbox-item').forEach(item => {
+          item.addEventListener('click', () => {
+            const exId = item.getAttribute('data-ex-id');
+            if (selectedExercises.has(exId)) {
+              selectedExercises.delete(exId);
+              item.classList.remove('selected');
+            } else {
+              selectedExercises.add(exId);
+              item.classList.add('selected');
+            }
+          });
+        });
+      }
+
+      function openModal() {
+        // Reset form
+        addWorkoutForm.reset();
+        selectedExercises.clear();
+        document.querySelectorAll('.checkbox-item.selected').forEach(el => {
+          el.classList.remove('selected');
+        });
+
+        // Set default hari ke hari ini
+        document.getElementById('inputDay').value = getTodayName();
+
+        // Set default waktu
+        const now = new Date();
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        document.getElementById('inputTime').value = `${hours}:${minutes}`;
+
+        modalOverlay.classList.add('show');
+      }
+
+      function closeModal() {
+        modalOverlay.classList.remove('show');
+      }
+
+      // ============ EVENT LISTENERS ============
+      // Modal
+      openAddModalBtn.addEventListener('click', openModal);
+      closeModalBtn.addEventListener('click', closeModal);
+      cancelBtn.addEventListener('click', closeModal);
+      modalOverlay.addEventListener('click', (e) => {
+        if (e.target === modalOverlay) closeModal();
+      });
+
+      // Form submit
+      addWorkoutForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+
+        const title = document.getElementById('inputTitle').value.trim();
+        const day = document.getElementById('inputDay').value;
+        const time = document.getElementById('inputTime').value;
+        const notes = document.getElementById('inputNotes').value.trim();
+
+        if (!title) {
+          showToast('Judul latihan harus diisi');
+          return;
+        }
+
+        if (selectedExercises.size === 0) {
+          showToast('Pilih minimal 1 latihan');
+          return;
+        }
+
+        // Hitung tanggal untuk hari yang dipilih (dalam minggu ini)
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+        const currentDayIndex = today.getDay();
+        const targetDayIndex = dayNameToIndex(day);
+        let diff = targetDayIndex - currentDayIndex;
+        // Jika hari target sudah lewat minggu ini, ambil minggu depan? 
+        // Kita pilih: gunakan minggu ini (bisa minus), tapi minimal hari ini
+        // Untuk kesederhanaan, kita set ke tanggal minggu ini (Senin-Minggu)
+        const monday = new Date(today);
+        const diffToMonday = (currentDayIndex === 0 ? 6 : currentDayIndex - 1);
+        monday.setDate(today.getDate() - diffToMonday);
+        const targetDate = new Date(monday);
+        // Konversi: targetDayIndex 1=Senin ... 0=Minggu
+        const dayOffset = targetDayIndex === 0 ? 6 : targetDayIndex - 1;
+        targetDate.setDate(monday.getDate() + dayOffset);
+
+        const workout = {
+          id: 'w_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9),
+          title,
+          day,
+          time,
+          notes,
+          date: getDateString(targetDate),
+          exercises: Array.from(selectedExercises),
+          createdAt: new Date().toISOString()
+        };
+
+        addWorkout(workout);
+        closeModal();
+      });
+
+      // Filter buttons
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          filterBtns.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentFilter = btn.getAttribute('data-filter');
+          renderWorkouts();
+        });
+      });
+
+      // Water buttons
+      addWaterHeaderBtn.addEventListener('click', addWater);
+      resetWaterHeaderBtn.addEventListener('click', resetWater);
+      addGlassBtn.addEventListener('click', addWater);
+      resetGlassBtn.addEventListener('click', resetWater);
+
+      // ESC untuk tutup modal
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modalOverlay.classList.contains('show')) {
+          closeModal();
+        }
+      });
+
+      // ============ INISIALISASI ============
+      function init() {
+        loadFromStorage();
+        updateWaterUI();
+        renderExerciseOptions();
+        renderWorkouts();
+
+        // Jika belum ada workout, tambahkan contoh default
+        if (workouts.length === 0) {
+          const today = new Date();
+          const currentDayIndex = today.getDay();
+          const monday = new Date(today);
+          const diffToMonday = (currentDayIndex === 0 ? 6 : currentDayIndex - 1);
+          monday.setDate(today.getDate() - diffToMonday);
+
+          const sampleWorkouts = [
+            { day: 'Senin', dayOffset: 0, title: 'Dada & Trisep', time: '07:00', exercises: ['bench_press', 'push_up', 'dips'], notes: 'Fokus form' },
+            { day: 'Selasa', dayOffset: 1, title: 'Punggung & Biceps', time: '07:00', exercises: ['pull_up', 'barbell_row', 'hammer_curl'], notes: '' },
+            { day: 'Rabu', dayOffset: 2, title: 'Kaki & Core', time: '07:00', exercises: ['squat', 'lunges', 'plank'], notes: '' },
+            { day: 'Kamis', dayOffset: 3, title: 'Bahu & Perut', time: '07:00', exercises: ['overhead_press', 'lateral_raise', 'crunch'], notes: '' },
+            { day: 'Jumat', dayOffset: 4, title: 'Full Body + Kardio', time: '07:00', exercises: ['deadlift', 'burpees', 'jump_rope'], notes: '' }
+          ];
+
+          sampleWorkouts.forEach((s, i) => {
+            const d = new Date(monday);
+            d.setDate(monday.getDate() + s.dayOffset);
+            workouts.push({
+              id: 'sample_' + i + '_' + Date.now(),
+              title: s.title,
+              day: s.day,
+              time: s.time,
+              notes: s.notes,
+              date: getDateString(d),
+              exercises: s.exercises,
+              createdAt: new Date().toISOString()
+            });
+          });
+          saveWorkouts();
+          renderWorkouts();
+        }
+
+        console.log('Workout Planner siap! Data tersimpan di localStorage.');
+      }
+
+      init();
+    })();
+  </script>
+</body>
+</html>
